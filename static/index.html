@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 13px Helvetica, Arial;
+        }
+
+        form {
+            background: #000;
+            padding: 3px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        form input {
+            border: 0;
+            padding: 10px;
+            width: 90%;
+            margin-right: .5%;
+        }
+
+        form button {
+            width: 9%;
+            background: rgb(130, 224, 255);
+            border: none;
+            padding: 10px;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #messages li {
+            padding: 5px 10px;
+        }
+
+        #messages li:nth-child(odd) {
+            background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="messages"></ul>
+    <form action="">
+        <input id="m" autocomplete="off" /><button type="button" id="sendBtn">Send</button>
+    </form>
+    <script src="./js/socket.io.js"></script>
+    <script>
+        var url = "192.168.0.105:3000"
+        var socket = io(url,{
+    
+        });
+        var messageList = document.getElementById('messages')
+        socket.on('connect', function () {});
+        socket.on('chat message', function (data) {
+            console.log(data)
+            var node = document.createElement('li')
+            node.innerHTML = '<li>' + data.data + '</li>'
+            messageList.appendChild(node)
+        });
+        socket.on('disconnect', function () {
+            console.log('go out')
+        });
+        socket.on('someone leave', function (data) {
+            console.log(data)
+        })
+        var sendInput = document.getElementById("m")
+        var sendBtn = document.getElementById("sendBtn")
+        sendBtn.addEventListener('click', function () {
+            console.log(1,sendInput.value)
+            socket.emit('chat message', {data: sendInput.value})
+            sendInput.value = ''
+        })
+        var socket2 = io('/my-room')
+        socket2.on('hi', function (data) {
+            console.log(data)
+        })
+    </script>
+</body>
+
+</html>
