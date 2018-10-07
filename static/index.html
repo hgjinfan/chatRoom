@@ -63,9 +63,7 @@
     <script src="./js/socket.io.js"></script>
     <script>
         var url = "192.168.0.105:3000"
-        var socket = io(url,{
-    
-        });
+        var socket = io(url, {});
         var messageList = document.getElementById('messages')
         socket.on('connect', function () {});
         socket.on('chat message', function (data) {
@@ -83,14 +81,36 @@
         var sendInput = document.getElementById("m")
         var sendBtn = document.getElementById("sendBtn")
         sendBtn.addEventListener('click', function () {
-            console.log(1,sendInput.value)
-            socket.emit('chat message', {data: sendInput.value})
+            console.log(1, sendInput.value)
+            socket.emit('chat message', {
+                data: sendInput.value
+            })
             sendInput.value = ''
         })
         var socket2 = io('/my-room')
         socket2.on('hi', function (data) {
             console.log(data)
         })
+
+        var request = new XMLHttpRequest();
+        request.open('GET', '/getList', true);
+
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                // Success!
+                var resp = request.responseText;
+                console.log(resp)
+            } else {
+                // We reached our target server, but it returned an error
+
+            }
+        };
+
+        request.onerror = function () {
+            // There was a connection error of some sort
+        };
+
+        request.send();
     </script>
 </body>
 
