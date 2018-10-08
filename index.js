@@ -31,6 +31,7 @@ io.emit('chat message', {
     for: 'everyone'
 })
 
+// router
 router.get('/getList', UserController.getList)
 
 app
@@ -40,5 +41,5 @@ app
 app.use(staticServer(__dirname + "/static"))
 // app.listen(3000)
 server.listen(3000, () => {
-    console.log('listening on http://192.168.0.105:3000')
+    console.log('listening on http://localhost:3000')
 })
